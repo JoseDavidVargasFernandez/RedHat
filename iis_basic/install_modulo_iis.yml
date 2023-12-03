@@ -1,0 +1,8 @@
+- name: Install the iis web service
+  hosts: all
+
+  tasks:
+    - name: Install iis
+      win_feature:
+        name: Web-Server
+        state: present
