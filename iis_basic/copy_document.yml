@@ -1,0 +1,10 @@
+---
+- name: Copy Document 
+  hosts: all
+
+  tasks:
+    - name: Copy PDF
+      ansible.windows.win_copy:
+        src: C:\Users\vf_jd\Downloads\Prueba_Ansible.pdf
+        dest: C:\Users\vf_jd\Musica
+        remote_src: yes
