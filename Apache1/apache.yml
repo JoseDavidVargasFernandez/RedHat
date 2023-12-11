@@ -1,0 +1,23 @@
+---
+- name: Instalar Apache en RHEL
+  hosts: server_ubuntu
+  become: yes
+
+  tasks:
+    - name: Instalar Apache
+      dnf:
+        name: httpd
+        state: present
+      become: yes
+
+    - name: Iniciar servicio Apache
+      systemd:
+        name: httpd
+        state: started
+      become: yes
+
+    - name: Habilitar Apache para que inicie en el arranque
+      systemd:
+        name: httpd
+        enabled: yes
+      become: yes
