@@ -1,6 +1,6 @@
 ---
 - name: Instalar Apache en RHEL
-  hosts: server_ubuntu
+  hosts: *
   become: yes
 
   tasks:
