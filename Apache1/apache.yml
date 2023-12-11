@@ -1,6 +1,6 @@
 ---
 - name: Instalar Apache en RHEL
-  hosts: *
+  hosts: rhel_vmware
   become: yes
 
   tasks:
