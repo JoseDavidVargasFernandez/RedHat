@@ -1,7 +1,7 @@
 ---
 - name: Install the iis web service
-  hosts: all
-
+  hosts: windows_vmware
+  
   tasks:
     - name: Install iis
       ansible.windows.win_feature:
