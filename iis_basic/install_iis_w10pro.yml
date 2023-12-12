@@ -1,0 +1,16 @@
+---
+- name: Instalar IIS en Windows 10 Pro
+  hosts: windows_vmware
+  gather_facts: false
+
+  tasks:
+    - name: Descargar el instalador de IIS
+      win_get_url:
+        url: "https://aka.ms/iisexpress_amd64_en-US.msi"
+        dest: C:\Temp\iisexpress_amd64_en-US.msi
+
+    - name: Instalar IIS usando win_package
+      win_package:
+        path: C:\Temp\iisexpress_amd64_en-US.msi
+        arguments: "/quiet"
+        state: present
