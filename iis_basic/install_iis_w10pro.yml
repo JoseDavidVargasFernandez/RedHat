@@ -4,6 +4,9 @@
   gather_facts: false
 
   tasks:
+    - name: usuario
+      ansible.windows.win_whoami:
+      
     - name: Descargar el instalador de IIS
       ansible.windows.win_get_url:
         url: "https://aka.ms/iisexpress_amd64_en-US.msi"
