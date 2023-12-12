@@ -12,5 +12,4 @@
     - name: Instalar IIS usando win_package
       win_package:
         path: C:\Windows\Temp\iisexpress_amd64_en-US.msi
-        arguments: "/quiet"
         state: present
