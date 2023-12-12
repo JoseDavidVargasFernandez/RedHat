@@ -6,7 +6,7 @@
   tasks:
     - name: Descargar el instalador de IIS
       win_get_url:
-        url: "https://aka.ms/iisexpress_amd64_en-US.msi"
+        url: "https://www.microsoft.com/en-us/download/details.aspx?id=48264/iisexpress_amd64_en-US.msi"
         dest: C:\Windows\Temp\iisexpress_amd64_en-US.msi
 
     - name: Instalar IIS usando win_package
