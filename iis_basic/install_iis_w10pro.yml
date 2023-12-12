@@ -11,5 +11,5 @@
 
     - name: Instalar IIS usando win_package
       ansible.windows.win_package:
-        path: C:\Windows\Temp\iisexpress_amd64_en-US.msi
+        chdir: C:\Windows\Temp\iisexpress_amd64_en-US.msi
         state: present
