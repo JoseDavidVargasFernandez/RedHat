@@ -5,11 +5,11 @@
 
   tasks:
     - name: Descargar el instalador de IIS
-      win_get_url:
+      ansible.windows.win_get_url:
         url: "https://aka.ms/iisexpress_amd64_en-US.msi"
         dest: C:\Windows\Temp\iisexpress_amd64_en-US.msi
 
     - name: Instalar IIS usando win_package
-      win_package:
+      ansible.windows.win_package:
         path: C:\Windows\Temp\iisexpress_amd64_en-US.msi
         state: present
