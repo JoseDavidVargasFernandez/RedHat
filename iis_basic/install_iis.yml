@@ -15,7 +15,7 @@
 
     - name: Create website index.html
       ansible.windows.win_copy:
-        content: "{{ iis_test_message }}"
+        content: prueba exitosa
         dest: C:\Inetpub\wwwroot\index.html
 
     - name: Show website address
