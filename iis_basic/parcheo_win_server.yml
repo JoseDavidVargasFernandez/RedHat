@@ -1,26 +1,16 @@
 ---
-- name: Windows Server Patching
+- name: windows server patching
   hosts: win_server
-  gather_facts: false
-  
+
   tasks:
-    - name: Gather Windows facts
-      win_facts:
-
-    - name: Install Windows Updates
+    - name: Check for missing updates
       win_updates:
-        category_names:
-          - SecurityUpdates
-          - UpdateRollups
-          - CriticalUpdates
-        state: installed
-      register: update_result
+        state: searched
+      register: update_results
 
-    - name: Reboot if updates are installed
-      win_reboot:
-      when: update_result.reboot_required
-
-    - name: Wait for the server to come back online
-      wait_for_connection:
-        timeout: 300
-      when: update_result.reboot_required
+    - name: report update results
+      debug:
+        msg: |
+          {% for k in update_results.updates %}
+          {{ update_results.updates[k].title }}
+          {% endfor %}
