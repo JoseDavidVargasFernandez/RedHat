@@ -15,7 +15,7 @@
 
     - name: Create website index.html
       ansible.windows.win_copy:
-        content: SE AGREGA TEXTO QUE SE QUIERA VER 
+        content: SE AGREGA TEXTO QUE SE QUIERA VER para realizar prueba  
         dest: C:\Inetpub\wwwroot\index.html
 
     - name: Show website address
