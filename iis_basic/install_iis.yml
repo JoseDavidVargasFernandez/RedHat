@@ -15,7 +15,7 @@
 
     - name: Create website index.html
       ansible.windows.win_copy:
-        content: DEMO DE ANSIBLE  7/3/2024
+        content: DEMO DE ANSIBLE  
         dest: C:\Inetpub\wwwroot\index.html
 
     - name: Show website address
