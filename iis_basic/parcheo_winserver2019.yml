@@ -1,0 +1,26 @@
+---
+- name: Actualizar Windows Server 2019
+  hosts: win_server
+
+  tasks:
+    - name: Instalar actualizaciones
+      win_updates:
+        category_names:
+          - SecurityUpdates
+          - UpdateRollups
+          - CriticalUpdates
+          - FeaturePacks
+          - ServicePacks
+          - DefinitionUpdates
+          - UpdateRollups
+        state: installed
+      register: update_result
+
+    - name: Reiniciar el servidor si se realizaron actualizaciones
+      win_reboot:
+      when: update_result.reboot_required
+
+    - name: Esperar a que el servidor se reinicie
+      win_wait_for:
+        timeout: 300
+      when: update_result.reboot_required
