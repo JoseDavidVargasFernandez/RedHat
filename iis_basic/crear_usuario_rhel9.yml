@@ -1,0 +1,21 @@
+---
+- name: Crear nuevo usuario en RHEL 9
+  hosts: rhel_vmware
+  become: yes
+
+  vars_prompt:
+    - name: nuevo_usuario
+      prompt: prueba_rhel
+      private: no
+    - name: nueva_contraseña
+      prompt: 123456789
+      private: yes
+
+  tasks:
+    - name: Crear nuevo usuario
+      user:
+        name: "{{ nuevo_usuario }}"
+        password: "{{ nueva_contraseña | password_hash('sha512') }}"
+        shell: /bin/bash
+        createhome: yes
+        state: present
