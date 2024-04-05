@@ -1,0 +1,16 @@
+---
+- name: Actualizar servidor RHEL 9
+  hosts: rhel_vmware
+  become: yes
+
+  tasks:
+    - name: Actualizar paquetes del sistema
+      package:
+        name: "*"
+        state: latest
+      register: update_result
+      changed_when: update_result.changed
+
+    - name: Reiniciar el servidor si se realizaron actualizaciones
+      reboot:
+      when: update_result.changed
