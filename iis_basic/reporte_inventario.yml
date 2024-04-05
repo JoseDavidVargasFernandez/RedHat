@@ -1,0 +1,37 @@
+---
+- name: Crear reporte de inventario en Excel
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: Instalar la librería xlwt para Python
+      pip:
+        name: xlwt
+        state: present
+
+    - name: Crear archivo Excel
+      community.general.xlwt_worksheet:
+        path: "{{ playbook_dir }}/inventario.xls"  # Ruta donde se guardará el archivo Excel
+        columns:
+          - name: Hostname
+            width: 6000
+          - name: Dirección IP
+            width: 5000
+          - name: Sistema Operativo
+            width: 5000
+        rows:
+          - "{{ groups['all'] | default([]) }}"
+        cells:
+          - row: "{{ loop.index0 + 2 }}"
+            column: 1
+            value: "{{ hostvars[item]['inventory_hostname'] }}"
+            style:
+              font:
+                bold: true
+          - row: "{{ loop.index0 + 2 }}"
+            column: 2
+            value: "{{ hostvars[item]['ansible_host'] }}"
+          - row: "{{ loop.index0 + 2 }}"
+            column: 3
+            value: "{{ hostvars[item]['ansible_distribution'] }} {{ hostvars[item]['ansible_distribution_version'] }}"
+      loop: "{{ groups['all'] | default([]) }}"
