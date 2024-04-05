@@ -1,0 +1,8 @@
+---
+- name: Reiniciar servidor RHEL 9
+  hosts: rhel_vmware
+  become: yes
+
+  tasks:
+    - name: Reiniciar el servidor
+      reboot:
