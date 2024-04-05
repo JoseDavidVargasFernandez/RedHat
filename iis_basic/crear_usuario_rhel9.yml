@@ -14,8 +14,8 @@
   tasks:
     - name: Crear nuevo usuario
       user:
-        name: "{{ prueba_rhel }}"
-        password: "{{ 123456789 | password_hash('sha512') }}"
+        name: "{{ nuevo_usuario }}"
+        password: "{{ nueva_contraseña | password_hash('sha512') }}"
         shell: /bin/bash
         createhome: yes
         state: present
