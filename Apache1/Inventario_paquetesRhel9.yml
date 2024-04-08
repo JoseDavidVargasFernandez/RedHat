@@ -4,6 +4,12 @@
   become: yes
 
   tasks:
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+      path: /home/rhel_ansible/reporte1
+      state: directory
+      mode: '0755'
+
     - name: Obtener lista de paquetes instalados
       command: rpm -qa
       register: paquetes_instalados
@@ -11,4 +17,4 @@
     - name: Crear archivo de texto con la lista de paquetes
       copy:
         content: "{{ paquetes_instalados.stdout_lines | join('\n') }}"
-        dest: /home/rhel_ansible/paquetes_instalados.txt
+        dest: /home/rhel_ansible/reporte1/paquetes_instalados.txt
