@@ -1,6 +1,6 @@
 ---
 - name: Crear archivo de lista de paquetes instalados en RHEL 9
-  hosts: tus_servidores
+  hosts: rhel_vmware
   become: yes
 
   tasks:
