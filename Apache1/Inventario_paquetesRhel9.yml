@@ -5,10 +5,11 @@
 
   tasks:
     - name: Create a directory if it does not exist
-      ansible.builtin.file:
-      path: /home/rhel_ansible/reporte1
-      state: directory
-      mode: '0755'
+      #nsible.builtin.file:
+      file:
+       path: /home/rhel_ansible/reporte1
+       state: directory
+      #mode: '0755'
 
     - name: Obtener lista de paquetes instalados
       command: rpm -qa
