@@ -1,0 +1,14 @@
+---
+- name: Crear archivo de lista de paquetes instalados en RHEL 9
+  hosts: tus_servidores
+  become: yes
+
+  tasks:
+    - name: Obtener lista de paquetes instalados
+      command: rpm -qa
+      register: paquetes_instalados
+
+    - name: Crear archivo de texto con la lista de paquetes
+      copy:
+        content: "{{ paquetes_instalados.stdout_lines | join('\n') }}"
+        dest: /home/rhel_ansible/Documentos/paquetes_instalados.txt
