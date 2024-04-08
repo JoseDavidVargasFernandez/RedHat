@@ -1,1 +1,10 @@
 ---
+- name: Crear directorio en RHEL 9
+  hosts: tus_servidores
+  become: yes
+
+  tasks:
+    - name: Crear directorio
+      file:
+        path: /home/rhel_ansible/demo_reporte
+        state: directory
