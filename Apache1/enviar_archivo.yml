@@ -1,0 +1,21 @@
+---
+- name: Enviar archivo .txt por correo
+  hosts: rhel_vmware
+  gather_facts: false
+
+  tasks:
+    - name: Copiar el archivo .txt al servidor
+      copy:
+        src: /home/rhel_ansible/reporte1/paquetes_instalados.txt  # Cambia esto por la ruta del archivo que quieres enviar
+        dest: /tmp/archivo.txt
+
+    - name: Enviar correo con el archivo adjunto
+      mail:
+        host: smtp.office365.com  # Cambia esto por el servidor SMTP que quieras usar
+        port: 587  # Puerto SMTP
+        username: jose.vargas@nexsysla.com  # Nombre de usuario del correo electrónico
+        password: 08@manda2024  # Contraseña del correo electrónico
+        to: fernandezvargasjosedavid2012@gmail.com  # Dirección de correo electrónico del destinatario
+        subject: "Archivo adjunto"
+        body: "Adjunto encontrarás el archivo .txt"
+        attach: /tmp/archivo.txt
