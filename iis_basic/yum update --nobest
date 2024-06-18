@@ -1,0 +1,17 @@
+---
+- name: Actualizar paquetes en RHEL 9.4 con yum update --nobest
+  hosts: rhel_vmware
+  become: true
+  tasks:
+    - name: Actualizar todos los paquetes a la última versión disponible sin elegir la mejor opción
+      ansible.builtin.shell: yum update --nobest -y
+      register: yum_update_result
+      ignore_errors: yes
+
+    - name: Mostrar resultado de la actualización
+      ansible.builtin.debug:
+        var: yum_update_result
+    
+    - name: Reiniciar el servidor si se realizaron actualizaciones
+      reboot:
+      when: update_result.changed
