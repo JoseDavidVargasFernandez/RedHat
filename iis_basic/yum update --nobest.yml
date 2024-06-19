@@ -15,4 +15,4 @@
     
     - name: Reiniciar el servidor si se realizaron actualizaciones
       reboot:
-      when: update_result.changed
+      
