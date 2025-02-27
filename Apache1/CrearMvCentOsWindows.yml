@@ -3,11 +3,7 @@
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Verify ISO file exists
-      win_shell: |
-        if (Test-Path 'C:\\Users\\jose.vargas\\Documents\\ISO\\CentOS-Stream-10-latest-x86_64-dvd1.iso') { exit 0 } else { exit 1 }
-      register: iso_exists
-      failed_when: iso_exists.rc != 0
+    
 
     - name: Create VM directory
       win_file:
