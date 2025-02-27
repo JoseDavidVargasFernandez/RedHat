@@ -6,18 +6,18 @@
     
 
     - name: Create VM directory
-      win_file:
+      file:
         path: 'C:\\Users\\jose.vargas\\Documents\\ISO\\vm_directory'
         state: directory
 
     - name: Copy CentOS ISO to VM directory
-      win_copy:
+      copy:
         src: 'C:\\Users\\jose.vargas\\Documents\\ISO\\CentOS-Stream-10-latest-x86_64-dvd1.iso'
         dest: 'C:\\Users\\jose.vargas\\Documents\\ISO\\vm_directory\\CentOS.iso'
       when: iso_exists.rc == 0
 
     - name: Create VMX file
-      win_copy:
+      copy:
         dest: 'C:\\Users\\jose.vargas\\Documents\\ISO\\vm_directory\\CentOS.vmx'
         content: |
           .encoding = "UTF-8"
@@ -38,4 +38,4 @@
           scsi0:0.virtualDev = "lsilogic"
 
     - name: Create VMDK disk file
-      win_command: vmware-vdiskmanager -c -s 20GB -a ls
+      command: vmware-vdiskmanager -c -s 20GB -a ls
