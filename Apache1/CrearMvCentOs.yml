@@ -1,0 +1,38 @@
+- name: Crear una Máquina Virtual en VMware Workstation
+  hosts: localhost
+  become: yes
+  tasks:
+
+    - name: Crear carpeta para la nueva VM
+      file:
+        path: "/home/user/vmware/CentOS_Stream_VM"
+        state: directory
+
+    - name: Copiar archivo base de configuración VMX
+      copy:
+        src: "/home/user/vmware/templates/centos_template.vmx"
+        dest: "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmx"
+
+    - name: Modificar configuración de la VM (RAM y CPU)
+      lineinfile:
+        path: "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmx"
+        regexp: "{{ item.regex }}"
+        line: "{{ item.line }}"
+      loop:
+        - { regex: '^memsize =', line: 'memsize = "6144"' }
+        - { regex: '^numvcpus =', line: 'numvcpus = "1"' }
+
+    - name: Crear el disco virtual de 20GB
+      command: >
+        vmware-vdiskmanager -c -s 20GB -a lsilogic -t 0 "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmdk"
+      args:
+        creates: "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmdk"
+
+    - name: Adjuntar el disco virtual a la VM
+      lineinfile:
+        path: "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmx"
+        line: 'scsi0:0.fileName = "CentOS_Stream.vmdk"'
+
+    - name: Iniciar la VM en VMware Workstation
+      command: >
+        vmrun -T ws start "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmx" nogui
