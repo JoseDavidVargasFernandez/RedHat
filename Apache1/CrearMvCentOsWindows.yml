@@ -5,13 +5,13 @@
   tasks:
     - name: Create VM directory
       file:
-        path: /path/to/vm_directory
+        path: 'C:\\Users\\jose.vargas\\Downloads\\vm_directory'
         state: directory
 
     - name: Copy CentOS ISO to VM directory
       copy:
-        src:  'C:\Users\jose.vargas\Downloads\rhel-9.4-x86_64-boot.iso'
-        dest: /path/to/vm_directory/CentOS.iso
+        src:  'C:\\Users\\jose.vargas\\Downloads\\CentOS-Stream-10-latest-x86_64-dvd1.iso'
+        dest: 'C:\\Users\\jose.vargas\\Downloads\\vm_directory\\CentOS.iso'
         remote_src: yes
 
     - name: Create VMX file
