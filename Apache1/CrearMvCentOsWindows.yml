@@ -1,37 +1,42 @@
-- name: Crear una máquina virtual en VMware Workstation 17 Player (Windows)
-  hosts: windows
-  tasks:
+---
+- name: Deploy CentOS VM on VMware Workstation
+  hosts: localhost
+  gather_facts: no
 
-    - name: Crear directorio para la VM
-      win_file:
-        path: "C:\\Users\\Public\\Documents\\VMware\\CentOS_Stream_VM"
+  tasks:
+    - name: Create VM directory
+      file:
+        path: /path/to/vm_directory
         state: directory
 
-    - name: Copiar plantilla base VMX
-      win_copy:
-        src: "C:\\Users\\Public\\Documents\\VMware\\templates\\centos_template.vmx"
-        dest: "C:\\Users\\Public\\Documents\\VMware\\CentOS_Stream_VM\\CentOS_Stream.vmx"
+    - name: Copy CentOS ISO to VM directory
+      copy:
+        src: C:\Users\jose.vargas\Downloads\CentOS-Stream-10-latest-x86_64-dvd1
+        dest: /path/to/vm_directory/CentOS.iso
 
-    - name: Modificar configuración de la VM (RAM y CPU)
-      win_shell: |
-        (Get-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx") -replace 'memsize = "\d+"', 'memsize = "6144"' | Set-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx"
-        (Get-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx") -replace 'numvcpus = "\d+"', 'numvcpus = "1"' | Set-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx"
+    - name: Create VMX file
+      copy:
+        dest: /path/to/vm_directory/CentOS.vmx
+        content: |
+          .encoding = "UTF-8"
+          config.version = "8"
+          virtualHW.version = "18"
+          numvcpus = "2"
+          memsize = "6144"
+          ide0:0.present = "TRUE"
+          ide0:0.fileName = "CentOS.iso"
+          ide0:0.deviceType = "cdrom-image"
+          ethernet0.present = "TRUE"
+          ethernet0.connectionType = "nat"
+          displayName = "CentOS VM"
+          guestOS = "centos-64"
+          scsi0:0.present = "TRUE"
+          scsi0:0.fileName = "CentOS.vmdk"
+          scsi0:0.deviceType = "disk"
+          scsi0:0.virtualDev = "lsilogic"
 
-    - name: Crear disco virtual de 20GB
-      win_shell: |
-        "C:\Program Files (x86)\VMware\VMware Workstation\vmware-vdiskmanager.exe" -c -s 20GB -a lsilogic -t 0 "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmdk"
+    - name: Create VMDK disk file
+      command: vmware-vdiskmanager -c -s 20GB -a lsilogic -t 1 /path/to/vm_directory/CentOS.vmdk
 
-    - name: Adjuntar disco virtual a la VM
-      win_shell: |
-        (Get-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx") + "`r`nscsi0:0.fileName = `"`"CentOS_Stream.vmdk`"`"" | Set-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx"
-
-    - name: Configurar ISO de instalación de CentOS Stream
-      win_shell: |
-        (Get-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx") + "`r`nide1:0.present = `"`"TRUE`"`"" | Set-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx"
-        (Get-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx") + "`r`nide1:0.fileName = `"`"C:\Users\Public\Downloads\CentOS-Stream.iso`"`"" | Set-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx"
-        (Get-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx") + "`r`nide1:0.deviceType = `"`"cdrom-image`"`"" | Set-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx"
-        (Get-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx") + "`r`nbios.bootOrder = `"`"cdrom`"`"" | Set-Content "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx"
-
-    - name: Iniciar la VM en VMware Workstation
-      win_shell: |
-        "C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe" -T ws start "C:\Users\Public\Documents\VMware\CentOS_Stream_VM\CentOS_Stream.vmx" nogui
+    - name: Run VM
+      command: vmrun -T ws start /path/to/vm_directory/CentOS.vmx nogui
