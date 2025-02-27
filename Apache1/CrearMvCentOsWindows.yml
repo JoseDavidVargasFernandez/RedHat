@@ -2,7 +2,6 @@
 - name: Deploy CentOS VM on VMware Workstation
   hosts: localhost
   gather_facts: no
-
   tasks:
     - name: Create VM directory
       file:
@@ -11,8 +10,8 @@
 
     - name: Copy CentOS ISO to VM directory
       copy:
-        src: 'C:\Users\jose.vargas\Downloads\CentOS-Stream-10-latest-x86_64-dvd1.iso'
-        dest: 'C:\Users\jose.vargas\Downloads\CentOS-Stream-10-latest-x86_64-dvd1.iso'
+        src: "C:\\Users\\jose.vargas\\Downloads\\CentOS-Stream-10-latest-x86_64-dvd1.iso"
+        dest: /path/to/vm_directory/CentOS.iso
         remote_src: yes
 
     - name: Create VMX file
