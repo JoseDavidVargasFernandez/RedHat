@@ -18,7 +18,7 @@
 
     - name: Create VMX file
       copy:
-        dest: 'C:\\Users\\jose.vargas\\Documents\\ISO\\vm_directory\\CentOS.vmx'
+        dest: 'C:\\Temp\\vm_directory\\CentOS.vmx'
         content: |
           .encoding = "UTF-8"
           config.version = "8"
