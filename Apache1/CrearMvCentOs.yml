@@ -4,7 +4,7 @@
   tasks:
 
     - name: Asignar ISO de instalación de CentOS Stream
-      linefile:
+      lineinfile:
         path: "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmx"
         line: 'ide1:0.fileName = "C:\Users\jose.vargas\Downloads\CentOS-Stream-10-latest-x86_64-dvd1"'
 
