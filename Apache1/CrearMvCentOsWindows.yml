@@ -8,11 +8,17 @@
         path: 'C:\Users\jose.vargas\Documents\ISO\vm_directory'
         state: directory
 
+    - name: Verify ISO file exists
+      command: powershell -command "Test-Path 'C:\\Users\\jose.vargas\\Documents\\ISO\\CentOS-Stream-10-latest-x86_64-dvd1.iso'"
+      register: iso_exists
+      failed_when: iso_exists.rc != 0
+
     - name: Copy CentOS ISO to VM directory
       copy:
         src:  "C:\\Users\\jose.vargas\\Documents\\ISO\\CentOS-Stream-10-latest-x86_64-dvd1.iso"
         dest: "C:\\Users\\jose.vargas\\Documents\\ISO\\vm_directory\\CentOS1.iso"
         remote_src: yes
+      when: iso_exists.rc == 0
 
     - name: Create VMX file
       copy:
