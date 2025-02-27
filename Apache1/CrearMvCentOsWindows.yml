@@ -9,7 +9,7 @@
         path: /path/to/vm_directory
         state: directory
 
-    -  name: Copy CentOS ISO to VM directory
+    - name: Copy CentOS ISO to VM directory
       copy:
         src: 'C:\\Users\\jose.vargas\\Downloads\\CentOS-Stream-10-latest-x86_64-dvd1.iso'
         dest: /path/to/vm_directory/CentOS.iso
