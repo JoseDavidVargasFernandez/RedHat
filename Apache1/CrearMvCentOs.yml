@@ -8,15 +8,15 @@
         path: "/home/user/vmware/CentOS_Stream_VM"
         state: directory
 
-    - name: Asignar ISO de instalación de CentOS Stream
-      lineinfile:
-        path: "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmx"
-        line: 'ide1:0.fileName = "C:\Users\jose.vargas\Downloads\CentOS-Stream-10-latest-x86_64-dvd1"'
-
     - name: Copiar archivo base de configuración VMX
       copy:
         src: "/home/user/vmware/templates/centos_template.vmx"
         dest: "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmx"
+
+    - name: Asignar ISO de instalación de CentOS Stream
+      lineinfile:
+        path: "/home/user/vmware/CentOS_Stream_VM/CentOS_Stream.vmx"
+        line: 'ide1:0.fileName = "C:\Users\jose.vargas\Downloads\CentOS-Stream-10-latest-x86_64-dvd1"'
 
     - name: Modificar configuración de la VM (RAM y CPU)
       lineinfile:
