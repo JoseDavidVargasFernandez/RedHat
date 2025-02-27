@@ -7,13 +7,13 @@
 
     - name: Create VM directory
       file:
-        path: 'C:\\Temp\\vm_directory'
+        path: 'C:\\Users\\jose.vargas\\Documents\\vm_directory'
         state: directory
 
     - name: Copy CentOS ISO to VM directory
       copy:
-        src:  'C:\\Temp\\CentOS-Stream-10-latest-x86_64-dvd1.iso'
-        dest: 'C:\\Temp\\vm_directory\\CentOS.iso'
+        src:  'C:\\Users\\jose.vargas\\Documents\\CentOS-Stream-10-latest-x86_64-dvd1.iso'
+        dest: 'C:\\Users\\jose.vargas\\Documents\\vm_directory\\CentOS.iso'
         remote_src: yes
 
     - name: Create VMX file
