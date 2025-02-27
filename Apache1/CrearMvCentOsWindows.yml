@@ -1,6 +1,6 @@
 ---
 - name: Deploy CentOS VM on VMware Workstation
-  hosts: localhost
+  hosts: MVCentosAnsible
   gather_facts: no
   tasks:
     
