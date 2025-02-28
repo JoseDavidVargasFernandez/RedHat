@@ -2,23 +2,23 @@
 - name: Deploy CentOS VM on VMware Workstation
   hosts: localhost
   gather_facts: no
+
   tasks:
-    
 
     - name: Create VM directory
-      file:
+      win_file:
         path: 'C:\\Users\\jose.vargas\\Documents\\vm_directory'
         state: directory
 
     - name: Copy CentOS ISO to VM directory
-      copy:
-        src:  'C:\\Users\\jose.vargas\\Documents\\CentOS-Stream-10-latest-x86_64-dvd1.iso'
+      win_copy:
+        src: 'C:\\Users\\jose.vargas\\Documents\\CentOS-Stream-10-latest-x86_64-dvd1.iso'
         dest: 'C:\\Users\\jose.vargas\\Documents\\vm_directory\\CentOS.iso'
-        remote_src: yes
+        
 
     - name: Create VMX file
-      copy:
-        dest: 'C:\\Temp\\vm_directory\\CentOS.vmx'
+      win_copy:
+        dest: 'C:\\Users\\jose.vargas\\Documents\\vm_directory\\CentOS.vmx'
         content: |
           .encoding = "UTF-8"
           config.version = "8"
@@ -38,4 +38,4 @@
           scsi0:0.virtualDev = "lsilogic"
 
     - name: Create VMDK disk file
-      command: vmware-vdiskmanager -c -s 20GB -a ls
+      command: vmware-vdiskmanager -c -s 20GB -a lsilogic -t 0 
