@@ -4,7 +4,7 @@
   gather_facts: no
 
   tasks:
-
+  
     - name: Create VM directory
       win_file:
         path: 'C:\\Users\\jose.vargas\\Documents\\vm_directory'
@@ -14,7 +14,6 @@
       win_copy:
         src: 'C:\\Users\\jose.vargas\\Documents\\CentOS-Stream-10-latest-x86_64-dvd1.iso'
         dest: 'C:\\Users\\jose.vargas\\Documents\\vm_directory\\CentOS.iso'
-        
 
     - name: Create VMX file
       win_copy:
@@ -38,4 +37,7 @@
           scsi0:0.virtualDev = "lsilogic"
 
     - name: Create VMDK disk file
-      command: vmware-vdiskmanager -c -s 20GB -a lsilogic -t 0 
+      win_command: vmware-vdiskmanager -c -s 20GB -a lsilogic -t 0 'C:\\Users\\jose.vargas\\Documents\\vm_directory\\CentOS.vmdk'
+
+    - name: Start the VM
+      win_command: vmrun -T ws start 'C:\\Users\\jose.vargas\\Documents\\vm_directory\\CentOS.vmx'
