@@ -1,0 +1,68 @@
+---
+- name: Instalar y configurar Squid para bloquear sitios web
+  hosts: centos_demo
+  become: yes
+  vars:
+    # Lista de dominios a bloquear
+    dominios_bloqueados:
+      - .facebook.com
+      - .fbcdn.net
+      - .youtube.com
+      - .ytimg.com
+  tasks:
+    - name: Instalar Squid
+      dnf:
+        name: squid
+        state: present
+
+    - name: Crear directorio para listas de control de acceso
+      file:
+        path: /etc/squid/acls
+        state: directory
+        owner: squid
+        group: squid
+        mode: '0755'
+
+    - name: Crear archivo con dominios bloqueados
+      copy:
+        dest: /etc/squid/acls/dominios_bloqueados.acl
+        content: |
+          {% for dominio in dominios_bloqueados %}
+          {{ dominio }}
+          {% endfor %}
+        owner: squid
+        group: squid
+        mode: '0644'
+
+    - name: Configurar Squid para bloquear los dominios especificados
+      blockinfile:
+        path: /etc/squid/squid.conf
+        marker: "# ANSIBLE MANAGED BLOCK - BLOQUEO DE SITIOS"
+        block: |
+          # Lista de control de acceso para dominios bloqueados
+          acl sitios_bloqueados dstdomain "/etc/squid/acls/dominios_bloqueados.acl"
+          # Denegar acceso a los dominios bloqueados
+          http_access deny sitios_bloqueados
+          # Permitir acceso a todo lo demás
+          http_access allow all
+      notify:
+        - Reiniciar Squid
+
+    - name: Iniciar y habilitar Squid
+      systemd:
+        name: squid
+        state: started
+        enabled: yes
+
+    - name: Configurar firewall para permitir el acceso al proxy
+      firewalld:
+        port: 3128/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+  handlers:
+    - name: Reiniciar Squid
+      systemd:
+        name: squid
+        state: restarted
