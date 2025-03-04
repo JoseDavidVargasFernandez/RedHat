@@ -1,6 +1,6 @@
 ---
 - name: Configuración de servidor MySQL
-  hosts: centos_demo
+  hosts: centosprueba1
   become: yes
   tasks:
     - name: Instalar MySQL
@@ -17,6 +17,6 @@
     - name: Configurar la contraseña de root de MySQL
       mysql_user:
         name: root
-        password: "tu_contraseña"
+        password: "123"
         host_all: yes
         state: present
