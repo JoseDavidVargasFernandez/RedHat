@@ -1,0 +1,47 @@
+---
+- name: Instalar y configurar Apache en CentOS Stream
+  hosts: centosprueba1
+  become: yes  # Escalar privilegios para usar sudo
+  tasks:
+    - name: Actualizar los paquetes del sistema
+      dnf:
+        name: "*"
+        state: latest
+
+    - name: Instalar Apache (httpd)
+      dnf:
+        name: httpd
+        state: present
+
+    - name: Habilitar y arrancar el servicio Apache
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Configurar una página HTML personalizada
+      copy:
+        content: |
+          <html>
+          <head><title>Bienvenido a CentOS Stream</title></head>
+          <body>
+          <h1>Apache está funcionando correctamente en CentOS Stream</h1>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: '0644'
+
+    - name: Abrir el puerto 80 en el firewall
+      firewalld:
+        port: 80/tcp
+        permanent: true
+        state: enabled
+      notify: Reload Firewall
+
+  handlers:
+    - name: Reload Firewall
+      service:
+        name: firewalld
+        state: reloaded
