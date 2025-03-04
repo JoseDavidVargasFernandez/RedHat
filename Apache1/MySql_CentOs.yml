@@ -1,25 +1,28 @@
 ---
-- name: Configuración de servidor MySQL
+- name: Instalar y configurar MariaDB
   hosts: centosprueba1
   become: yes
-  collections:
-    - community.mysql
-    
+
   tasks:
-    - name: Instalar MySQL
+    - name: Instalar MariaDB
       yum:
-        name: mysql-server
+        name: mariadb-server
         state: present
 
-    - name: Iniciar y habilitar el servicio MySQL
-      systemd:
-        name: mysqld
+    - name: Asegurarse de que MariaDB esté habilitado y corriendo
+      service:
+        name: mariadb
         state: started
         enabled: yes
 
-    - name: Configurar la contraseña de root de MySQL
+    - name: Configurar usuario y base de datos
+      mysql_db:
+        name: root
+        state: present
+
+    - name: Crear usuario en MariaDB
       mysql_user:
         name: root
         password: "1234"
-        host_all: yes
+        priv: 'demo_db.*:ALL'
         state: present
