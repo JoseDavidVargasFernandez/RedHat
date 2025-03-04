@@ -1,0 +1,11 @@
+---
+- name: Reiniciar una máquina CentOS Stream
+  hosts: centos_demo
+  become: yes  # Escalar privilegios a root
+  tasks:
+    - name: Verificar conectividad al host
+      ping:
+
+    - name: Reiniciar el sistema
+      reboot:
+        reboot_timeout: 300  # Tiempo máximo de espera para el reinicio (en segundos)
