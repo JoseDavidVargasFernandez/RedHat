@@ -1,23 +1,26 @@
 ---
-- name: Instalar y configurar MariaDB
+- name: Instalar y configurar MariaDB en CentOS Stream
   hosts: centosprueba1
   become: yes
 
   tasks:
-    - name: Instalar MariaDB
+    - name: Habilitar el módulo de MariaDB en AppStream
+      command: dnf module enable mariadb -y
+
+    - name: Instalar MariaDB Server
       yum:
         name: mariadb-server
         state: present
 
-    - name: Asegurarse de que MariaDB esté habilitado y corriendo
+    - name: Habilitar y arrancar el servicio MariaDB
       service:
         name: mariadb
         state: started
         enabled: yes
 
-    - name: Configurar usuario y base de datos
+    - name: Crear base de datos de prueba
       mysql_db:
-        name: root
+        name: demo_db
         state: present
 
     - name: Crear usuario en MariaDB
