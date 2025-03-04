@@ -1,6 +1,6 @@
 ---
 - name: Playbook para parchar y reiniciar una máquina virtual CentOS Stream
-  hosts: all
+  hosts: server_Centos
   become: yes
 
   tasks:
