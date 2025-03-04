@@ -1,0 +1,25 @@
+---
+- name: Playbook para parchar y reiniciar una máquina virtual CentOS Stream
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Actualizar todos los paquetes
+      ansible.builtin.yum:
+        name: "*"
+        state: latest
+
+    - name: Reiniciar la máquina
+      ansible.builtin.shell: "shutdown -r now"
+      async: 1
+      poll: 0
+
+    - name: Esperar 2 minutos para que la máquina se reinicie
+      pause:
+        minutes: 2
+
+    - name: Esperar a que la máquina esté en línea
+      wait_for_connection:
+        delay: 10
+        timeout: 300
+        state: started
