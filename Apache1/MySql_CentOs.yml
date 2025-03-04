@@ -2,6 +2,9 @@
 - name: Configuración de servidor MySQL
   hosts: centosprueba1
   become: yes
+  collections:
+    - community.mysql
+    
   tasks:
     - name: Instalar MySQL
       yum:
