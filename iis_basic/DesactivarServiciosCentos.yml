@@ -1,0 +1,69 @@
+---
+- name: Desactivar servicios y generar reporte en CentOS Stream
+  hosts: centosprueba1  # Define el grupo de hosts en el inventario
+  become: yes  # Ejecutar con privilegios de root
+
+  tasks:
+    - name: Desactivar X11 (GUI)
+      systemd:
+        name: display-manager
+        enabled: no
+        state: stopped
+      ignore_errors: yes
+
+    - name: Desactivar CUPS (sistema de impresión)
+      systemd:
+        name: cups
+        enabled: no
+        state: stopped
+      ignore_errors: yes
+
+    - name: Desactivar firewalld
+      systemd:
+        name: firewalld
+        enabled: no
+        state: stopped
+
+    - name: Desactivar iptables
+      systemd:
+        name: iptables
+        enabled: no
+        state: stopped
+      ignore_errors: yes
+
+    - name: Desactivar SELinux
+      selinux:
+        state: disabled
+      notify:
+        - Reboot system (si SELinux estaba activo)
+
+    - name: Desactivar SMTP (Postfix o Sendmail)
+      systemd:
+        name: postfix
+        enabled: no
+        state: stopped
+      ignore_errors: yes
+
+    - name: Desactivar Sendmail (si está presente)
+      systemd:
+        name: sendmail
+        enabled: no
+        state: stopped
+      ignore_errors: yes
+
+    - name: Crear archivo de reporte en Descargas
+      copy:
+        content: |
+          Reporte de desactivación de servicios - {{ ansible_date_time.date }}
+          ====================================================
+          - X11: Desactivado
+          - CUPS: Desactivado
+          - FirewallD: Desactivado
+          - iptables: Desactivado
+          - SELinux: Desactivado
+          - SMTP (Postfix/Sendmail): Desactivado
+        dest: "/home/{{ ansible_user }}/Downloads/reporte_servicios.txt"
+
+  handlers:
+    - name: Reboot system (si SELinux estaba activo)
+      reboot:
