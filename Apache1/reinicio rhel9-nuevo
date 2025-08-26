@@ -1,0 +1,10 @@
+---
+- name: Reiniciar servidores RHEL 9
+  hosts: rhel9
+  become: yes
+  ignore_unreachable: yes
+  tasks:
+    - name: Reiniciar el sistema
+      ansible.builtin.reboot:
+        msg: "Reinicio programado desde Ansible"
+        reboot_timeout: 600
