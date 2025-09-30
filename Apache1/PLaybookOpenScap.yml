@@ -1,6 +1,6 @@
 ---
 - name: Ejecutar OpenSCAP en RHEL 9
-  hosts: rhel9
+  hosts: all
   become: yes
 
   vars:
