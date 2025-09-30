@@ -32,6 +32,7 @@
         /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
       args:
         creates: "{{ scap_output_dir }}/{{ scap_report }}"
+      ignore_errors: yes  
 
     - name: Mostrar ubicación del reporte
       ansible.builtin.debug:
