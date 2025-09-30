@@ -1,0 +1,40 @@
+---
+- name: Ejecutar OpenSCAP en RHEL 9
+  hosts: rhel9
+  become: yes
+
+  vars:
+    scap_profile: "xccdf_org.ssgproject.content_profile_pci-dss"
+    scap_output_dir: "/tmp/openscap"
+    scap_report: "scap-report.html"
+    scap_arf: "scap-report.xml"
+
+  tasks:
+    - name: Instalar paquetes requeridos
+      ansible.builtin.dnf:
+        name:
+          - openscap-scanner
+          - scap-security-guide
+        state: present
+
+    - name: Crear directorio para reportes
+      ansible.builtin.file:
+        path: "{{ scap_output_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Ejecutar escaneo con OpenSCAP
+      ansible.builtin.command: >
+        oscap xccdf eval
+        --profile {{ scap_profile }}
+        --results {{ scap_output_dir }}/{{ scap_arf }}
+        --report {{ scap_output_dir }}/{{ scap_report }}
+        /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+      args:
+        creates: "{{ scap_output_dir }}/{{ scap_report }}"
+
+    - name: Mostrar ubicación del reporte
+      ansible.builtin.debug:
+        msg: "Reporte generado en {{ scap_output_dir }}/{{ scap_report }}"
+
+
