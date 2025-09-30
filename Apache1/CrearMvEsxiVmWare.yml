@@ -1,0 +1,42 @@
+---
+- name: Crear MV en VMware ESXi
+  hosts: localhost
+  gather_facts: no
+  vars:
+    vcenter_hostname: "192.168.1.100"       # IP o hostname del ESXi
+    vcenter_user: "root"                    # Usuario ESXi
+    vcenter_password: "TuPassword"          # Contraseña
+    datastore: "datastore1"                 # Datastore donde se creará la MV
+    vm_name: "NuevaMV"                      # Nombre de la MV
+    vm_folder: "/"                           # Carpeta en ESXi (puede ser / si no hay subcarpetas)
+    vm_network: "VM Network"                # Nombre de la red virtual
+    vm_guest: "ubuntu64Guest"               # Tipo de sistema operativo
+    vm_disk_size: 20                         # Tamaño disco en GB
+    vm_cpus: 2
+    vm_memory: 4096                          # Memoria en MB
+
+  tasks:
+    - name: Crear máquina virtual
+      community.vmware.vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_user }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: no
+        name: "{{ vm_name }}"
+        folder: "{{ vm_folder }}"
+        state: poweredon
+        guest_id: "{{ vm_guest }}"
+        disk:
+          - size_gb: "{{ vm_disk_size }}"
+            type: thin
+            datastore: "{{ datastore }}"
+        hardware:
+          memory_mb: "{{ vm_memory }}"
+          num_cpus: "{{ vm_cpus }}"
+        networks:
+          - name: "{{ vm_network }}"
+            type: static
+            ip: "192.168.1.150"       # IP opcional
+            netmask: "255.255.255.0"
+            gateway: "192.168.1.1"
+      delegate_to: localhost
